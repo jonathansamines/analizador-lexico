@@ -14,7 +14,5 @@ int main() {
   char* contenido_archivo = leer_contenido_archivo(nombre_archivo);
   analizar_definicion(contenido_archivo);
 
-  // printf("El contenido: %s", lineas);
-
   return 0;
 }

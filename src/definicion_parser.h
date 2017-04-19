@@ -21,7 +21,7 @@ char* crear_rangos(char* rangos) {
 
   while (rango != NULL){
     rango = strtok_r(NULL, SEPARADOR_CADENA_RANGO_LISTA, &end_lista);
-    printf("%sgeneracion de rangos: %s para %s", CARACTER_SALTO_LINEA, rango, rangos);
+    // printf("%sgeneracion de rangos: %s para %s", CARACTER_SALTO_LINEA, rango, rangos);
   }
 
   return NULL;
@@ -43,13 +43,11 @@ char* analizar_valor_expresion(char* valor_expresion) {
     if (indice_fin != -1) {
       // es una cadena simple
       char cadena[indice_fin - indice_inicio];
-      substraer(valor_expresion, indice_inicio + 1, indice_fin - 1, cadena);
-      // printf("cadena encontrada!!!  %s", valor_expresion);
+      valor_expresion = substraer(valor_expresion, indice_inicio + 1, indice_fin - 1, cadena);
 
-      return NULL;
+      return valor_expresion;
     }
 
-    printf("Cadena no terminada correctamente ....");
     return NULL;
   }
 
@@ -63,17 +61,15 @@ char* analizar_valor_expresion(char* valor_expresion) {
       // es una cadena simple
       char cadena[indice_fin - indice_inicio];
       substraer(valor_expresion, indice_inicio + 1, indice_fin - 1, cadena);
-      printf("rango encontrado!!!  %s", cadena);
       valor_expresion = crear_rangos(cadena);
 
-      return NULL;
+      return valor_expresion;
     }
 
-    printf("Rango no terminado correctamente ....");
     return NULL;
   }
 
-  return valor_expresion;
+  return NULL;
 }
 
 char* analizar_definicion_expresion(char* linea) {
@@ -87,7 +83,11 @@ char* analizar_definicion_expresion(char* linea) {
   valor_expresion = eliminar_espacios(valor_expresion);
   valor_expresion = analizar_valor_expresion(valor_expresion);
 
-  printf("%s%sToken: %s := %s", CARACTER_SALTO_LINEA, CARACTER_TABULACION, identificador_expresion, valor_expresion);
+  if (!cadena_nula(valor_expresion)) {
+    printf("%s   + Identificador token: %s", CARACTER_SALTO_LINEA, identificador_expresion);
+    printf("%s   + Valor token: %s", CARACTER_SALTO_LINEA, valor_expresion);
+    printf("%s", CARACTER_SALTO_LINEA);
+  }
 
   return NULL;
 }
@@ -95,7 +95,7 @@ char* analizar_definicion_expresion(char* linea) {
 char* analizar_definicion(char* cadena) {
   char* linea = leer_siguiente_linea(cadena);
 
-  printf("%s [BLOQUE] Especificacion general", CARACTER_SALTO_LINEA);
+  printf("%s%s [BLOQUE] Especificacion general", CARACTER_SALTO_LINEA, CARACTER_SALTO_LINEA);
 
   if (cadena_nula(linea) ||
     !cadenas_iguales(linea, SEPARADOR_ESPECIFICACION_GENERAL)) {
@@ -106,10 +106,15 @@ char* analizar_definicion(char* cadena) {
   // mientras no llegue a la especificación regular
   // se analiza la especificacion general
   do {
-    printf("%sL%d - %s", CARACTER_SALTO_LINEA, __numero_linea, linea);
-
     linea = leer_siguiente_linea(NULL);
-    analizar_definicion_expresion(linea);
+    printf("%s  (L%d) - %s", CARACTER_SALTO_LINEA, __numero_linea, linea);
+
+    if (!cadenas_iguales(linea, SEPARADOR_ESPECIFICACION_GENERAL)) {
+      analizar_definicion_expresion(linea);
+
+    } else {
+      printf("%s   + Separador ignorado", CARACTER_SALTO_LINEA);
+    }
   } while (
     !cadena_nula(linea) &&
     !cadenas_iguales(linea, SEPARADOR_ESPECIFICACION_GENERAL)
@@ -120,14 +125,19 @@ char* analizar_definicion(char* cadena) {
     return NULL;
   }
 
-  printf("%s [BLOQUE] Especificacion regular", CARACTER_SALTO_LINEA);
+  printf("%s%s [BLOQUE] Especificacion regular", CARACTER_SALTO_LINEA, CARACTER_SALTO_LINEA);
 
   // mientras no llegue a la seccion de validaciones
   // se analiza la especificacion regular
   do {
-    printf("%sL%d - %s", CARACTER_SALTO_LINEA, __numero_linea, linea);
     linea = leer_siguiente_linea(NULL);
-    analizar_definicion_expresion(linea);
+    printf("%s  (L%d) - %s", CARACTER_SALTO_LINEA, __numero_linea, linea);
+
+    if (!cadenas_iguales(linea, SEPARADOR_VALIDACIONES)) {
+      analizar_definicion_expresion(linea);
+    } else {
+     printf("%s   + Separador ignorado", CARACTER_SALTO_LINEA);
+    }
   } while (
     !cadena_nula(linea) &&
     !cadenas_iguales(linea, SEPARADOR_VALIDACIONES)
@@ -138,23 +148,31 @@ char* analizar_definicion(char* cadena) {
     return NULL;
   }
 
-  printf("%s [BLOQUE] Seccion de Validaciones", CARACTER_SALTO_LINEA);
+  printf("%s%s [BLOQUE] Seccion de Validaciones", CARACTER_SALTO_LINEA, CARACTER_SALTO_LINEA);
 
   // mientras no llegue al cierre de la sección de validaciones
   // se analiza la seccion de validaciones
   do {
-    printf("%sL%d - %s", CARACTER_SALTO_LINEA, __numero_linea, linea);
     linea = leer_siguiente_linea(NULL);
-    analizar_definicion_expresion(linea);
+    printf("%s  (L%d) - %s", CARACTER_SALTO_LINEA, __numero_linea, linea);
+
+    if (!cadenas_iguales(linea, SEPARADOR_VALIDACIONES)) {
+      analizar_definicion_expresion(linea);
+
+    } else {
+      printf("%s   + Separador ignorado", CARACTER_SALTO_LINEA);
+    }
   } while (
     !cadena_nula(linea) &&
     !cadenas_iguales(linea, SEPARADOR_VALIDACIONES)
   );
 
   if (cadena_nula(linea)) {
-    printf("%sERROR: Validaciones no definidas", CARACTER_SALTO_LINEA);
+    printf("%sERROR: Cierre de seccion de Validaciones no definida", CARACTER_SALTO_LINEA);
     return NULL;
   }
+
+  printf("%s%s", CARACTER_SALTO_LINEA, CARACTER_SALTO_LINEA);
 
   return linea;
 }
