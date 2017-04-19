@@ -1,0 +1,23 @@
+[%%]
+Letra := [a-z,A-Z]
+UnderLine := '_'
+Digito := [0-9]
+
+[%%]
+$Identificador := Letra (Letra | Digito | Underline)*
+NumeroEntero := Digito Digito*
+Punto := '.'
+NumeroFlotante := Numero Punto Numero
+ParentesisIzq := '('
+ParentesisDer := ')'
+BracketIzq := '['
+BracketDer := ']'
+OperadorBinario := ('+' | '-' | '*' | '/')
+OperadorLogico := ('<' | '>' | '==' | '<=' | '=>' ≤ '!=')
+
+[&&]
+Reservadas := [IF='IF', THEN='THEN', ELSE='ELSE', BEGIN='BEGIN', FOR='FOR', REPEAT='REPEAT', WHILE='WHILE', VARIABLE='VARIABLE', CONST='CONST', PROGRAM='PROGRAM', INCLUDE='INCLUDE', UNTIL='UNTIL', FOREACH='FOREACH', SPLIT='SPLIT', CASE='CASE', SWITCH='SWITCH']
+ComI := [/*, (*]
+ComF := [*/, *)]
+ComL := [--]
+[&&]
