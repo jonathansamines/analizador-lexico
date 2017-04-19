@@ -15,13 +15,25 @@ char* SEPARADOR_CADENA_RANGO_FIN = "]";
 char* SEPARADOR_CADENA_RANGO_LISTA = ",";
 char* SEPARADOR_CADENA_RANGO_EXPANSION = "-";
 
+char* expandir_rango(char* rango) {
+  char* end_expansion;
+  char* from = strtok_r(rango, SEPARADOR_CADENA_RANGO_EXPANSION, &end_expansion);
+  char* to = strtok_r(NULL, SEPARADOR_CADENA_RANGO_EXPANSION, &end_expansion);
+
+  printf("%s    - (from=%s) (to=%s)", CARACTER_SALTO_LINEA, rango, to);
+
+  return NULL;
+}
+
 char* crear_rangos(char* rangos) {
-  char *end_lista;
-  char *rango = strtok_r(rangos, SEPARADOR_CADENA_RANGO_LISTA, &end_lista);
+  char* end_lista;
+  char* rango = strtok_r(rangos, SEPARADOR_CADENA_RANGO_LISTA, &end_lista);
 
   while (rango != NULL){
     rango = strtok_r(NULL, SEPARADOR_CADENA_RANGO_LISTA, &end_lista);
+    expandir_rango(rango);
     // printf("%sgeneracion de rangos: %s para %s", CARACTER_SALTO_LINEA, rango, rangos);
+    return rango;
   }
 
   return NULL;

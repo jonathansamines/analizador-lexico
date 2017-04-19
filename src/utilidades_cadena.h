@@ -29,7 +29,7 @@
   }
 
   int indiceDe(char* cadena, char* subcadena, int desde) {
-    char* encontrado = strstr(cadena+desde, subcadena);
+    char* encontrado = strstr(cadena + desde, subcadena);
 
     if (encontrado != NULL) {
       return encontrado - cadena;
@@ -46,7 +46,7 @@
        return NULL;
     }
 
-    strncpy (subcadena, cadena + desde, hasta);
+    strncpy(subcadena, cadena + desde, hasta);
 
     return subcadena;
   }
