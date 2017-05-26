@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include "lector_archivos.h"
 #include "utilidades_cadena.h"
-#include "definicion_parser.h"
+#include "definicion-parser/parser.h"
 
 const char* nombre_archivo = "./definiciones/definicion.lang.test";
 

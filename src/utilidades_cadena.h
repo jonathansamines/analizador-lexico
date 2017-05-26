@@ -38,17 +38,15 @@
     return -1;
   }
 
-  char* substraer(char* cadena, int desde, int hasta, char* subcadena) {
-    int longitud_cadena = strlen(cadena);
+  void substraer(char cadena[], int posicion_inicial, int longitud, char subcadena[]) {
+    int posicion = 0;
 
-    if (desde + hasta > longitud_cadena)
-    {
-       return NULL;
+    while (posicion < longitud) {
+      subcadena[posicion] = cadena[posicion_inicial + posicion];
+      posicion++;
     }
 
-    strncpy(subcadena, cadena + desde, hasta);
-
-    return subcadena;
+    subcadena[posicion] = '\0';
   }
 
   char* eliminar_espacios(char *cadena) {
